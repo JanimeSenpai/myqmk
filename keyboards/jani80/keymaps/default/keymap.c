@@ -22,13 +22,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,           KC_NO,   KC_Q,           KC_W,    KC_E,    KC_R,    KC_T,    KC_NO,
         KC_CAPS_LOCK,    KC_V,    KC_A,           KC_S,    KC_D,    KC_F,    KC_G,    KC_NO,
         KC_NO,           KC_LSFT, HU_IACU,        HU_Y,    KC_X,    KC_C,    KC_B,    KC_B,
-        KC_NO,           KC_NO,   KC_LEFT_CTRL,   KC_NO,   KC_SPACE, KC_SPACE, KC_SPACE, KC_ENTER,
+        KC_NO,           KC_NO,   KC_LEFT_CTRL,   KC_NO,   KC_LSFT, KC_SPACE, KC_SPACE, KC_ENTER,
         // right half down
-        KC_F8,  KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_F13,  KC_F14,  KC_NO,
-        KC_NO,  KC_NO,   KC_7,    KC_8,    KC_9,    HU_ODIA, HU_UDIA, HU_OACU,
-        KC_NO,  HU_Z,    KC_U,    KC_I,    KC_O,    KC_P,    HU_ODAC, HU_UACU,
-        KC_NO,  KC_H,    KC_J,    KC_K,    KC_L,    HU_EACU, HU_AACU, HU_UDAC,
-        KC_NO,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,   KC_NO,
-        KC_NO,  KC_CAPS_LOCK,   KC_CAPS_LOCK,   KC_NO,   KC_NO,   KC_RIGHT_CTRL,   KC_NO,   KC_NO
+        KC_F8,  KC_F9,          KC_F10,         KC_F11,    KC_F12,  KC_F13,          KC_F14,  KC_NO,
+        KC_NO,  KC_7,           KC_8,           KC_9,      HU_ODIA, HU_UDIA,         HU_OACU, KC_NO,   
+        KC_NO,  HU_Z,           KC_U,           KC_I,      KC_O,    KC_P,            HU_ODAC, HU_UACU,
+        KC_NO,  KC_H,           KC_J,           KC_K,      KC_L,    HU_EACU,         HU_AACU, HU_UDAC,
+        KC_NO,  KC_N,           KC_M,           KC_COMM,   KC_DOT,  KC_SLSH,         KC_RSFT, KC_NO,
+        KC_NO,  KC_CAPS_LOCK,   KC_CAPS_LOCK,   KC_RSFT,   KC_NO,   KC_RIGHT_CTRL,   KC_NO,   KC_NO
     )
 };
