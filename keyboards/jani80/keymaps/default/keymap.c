@@ -4,6 +4,47 @@
 #include QMK_KEYBOARD_H
 #include "keymap_hungarian.h"
 
+// Define the keycode, `QK_USER` avoids collisions with existing keycodes
+enum keycodes {
+  KC_CYCLE_LAYERS = QK_USER,
+};
+
+// 1st layer on the cycle
+#define LAYER_CYCLE_START 0
+// Last layer on the cycle
+#define LAYER_CYCLE_END   1
+
+// Add the behaviour of this new keycode
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case KC_CYCLE_LAYERS:
+      // Our logic will happen on presses, nothing is done on releases
+      if (!record->event.pressed) { 
+        // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
+        return false;
+      }
+
+      uint8_t current_layer = get_highest_layer(layer_state);
+
+      // Check if we are within the range, if not quit
+      if (current_layer > LAYER_CYCLE_END || current_layer < LAYER_CYCLE_START) {
+        return false;
+      }
+
+      uint8_t next_layer = current_layer + 1;
+      if (next_layer > LAYER_CYCLE_END) {
+          next_layer = LAYER_CYCLE_START;
+      }
+      layer_move(next_layer);
+      return false;
+
+    // Process other keycodes normally
+    default:
+      return true;
+  }
+}
+
+// Place `KC_CYCLE_LAYERS` as a keycode in your keymap
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
      * ┌───┬───┬───┬───┐
@@ -48,45 +89,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 };
 
-
-// Define the keycode, `QK_USER` avoids collisions with existing keycodes
-enum keycodes {
-  KC_CYCLE_LAYERS = QK_USER,
-};
-
-// 1st layer on the cycle
-#define LAYER_CYCLE_START 0
-// Last layer on the cycle
-#define LAYER_CYCLE_END   1
-
-// Add the behaviour of this new keycode
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case KC_CYCLE_LAYERS:
-      // Our logic will happen on presses, nothing is done on releases
-      if (!record->event.pressed) { 
-        // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
-        return false;
-      }
-
-      uint8_t current_layer = get_highest_layer(layer_state);
-
-      // Check if we are within the range, if not quit
-      if (current_layer > LAYER_CYCLE_END || current_layer < LAYER_CYCLE_START) {
-        return false;
-      }
-
-      uint8_t next_layer = current_layer + 1;
-      if (next_layer > LAYER_CYCLE_END) {
-          next_layer = LAYER_CYCLE_START;
-      }
-      layer_move(next_layer);
-      return false;
-
-    // Process other keycodes normally
-    default:
-      return true;
-  }
-}
-
-// Place `KC_CYCLE_LAYERS` as a keycode in your keymap
