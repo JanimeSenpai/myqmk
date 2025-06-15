@@ -24,11 +24,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LEFT_GUI,           KC_B,    HU_IACU,         HU_Y,    KC_X,    KC_C,    HU_UACU,    KC_B,
         KC_NO,           KC_NO,   KC_LEFT_CTRL,   KC_NO,   KC_LSFT, KC_SPACE, KC_LSFT, KC_ENTER,
         // right half down
-        KC_F8,  KC_F9,          KC_F10,         KC_F11,             KC_F12,  KC_F13,          KC_F14,  KC_NO,
-        KC_NO,  KC_7,           KC_8,           KC_9,               HU_ODIA, HU_UDIA,         HU_OACU, KC_NO,   
-        KC_NO,  HU_Z,           KC_U,           KC_I,                KC_O,    KC_P,            HU_ODAC, HU_UACU,
+        KC_F8,  KC_F9,          KC_F10,         KC_F11,             KC_F12,  KC_F13,            KC_F14,   KC_CYCLE_LAYERS,
+        KC_NO,  KC_7,           KC_8,           KC_9,               HU_ODIA, HU_UDIA,           HU_OACU,  KC_NO,   
+        KC_NO,  HU_Z,           KC_U,           KC_I,                KC_O,    KC_P,             HU_ODAC, HU_UACU,
         KC_NO,  KC_H,           KC_J,           KC_K,                 KC_L,    HU_EACU,         HU_AACU, HU_UDAC,
-        KC_NO,  KC_N,           KC_M,           KC_COMM,             KC_DOT,  KC_SLSH,, KC_NO,
+        KC_NO,  KC_N,           KC_M,           KC_COMM,             KC_DOT,  KC_SLSH,          HU_UDAC, KC_NO,
         KC_NO,  KC_RSFT,        KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),   KC_NO,   KC_RIGHT_CTRL,   KC_NO,   KC_NO
     )
 };
+
+
+// Define the keycode, `QK_USER` avoids collisions with existing keycodes
+enum keycodes {
+  KC_CYCLE_LAYERS = QK_USER,
+};
+
+// 1st layer on the cycle
+#define LAYER_CYCLE_START 0
+// Last layer on the cycle
+#define LAYER_CYCLE_END   1
+
+// Add the behaviour of this new keycode
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case KC_CYCLE_LAYERS:
+      // Our logic will happen on presses, nothing is done on releases
+      if (!record->event.pressed) { 
+        // We've already handled the keycode (doing nothing), let QMK know so no further code is run unnecessarily
+        return false;
+      }
+
+      uint8_t current_layer = get_highest_layer(layer_state);
+
+      // Check if we are within the range, if not quit
+      if (current_layer > LAYER_CYCLE_END || current_layer < LAYER_CYCLE_START) {
+        return false;
+      }
+
+      uint8_t next_layer = current_layer + 1;
+      if (next_layer > LAYER_CYCLE_END) {
+          next_layer = LAYER_CYCLE_START;
+      }
+      layer_move(next_layer);
+      return false;
+
+    // Process other keycodes normally
+    default:
+      return true;
+  }
+}
+
+// Place `KC_CYCLE_LAYERS` as a keycode in your keymap
