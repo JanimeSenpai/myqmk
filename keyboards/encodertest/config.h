@@ -1,0 +1,2 @@
+#define ENCODER_A_PINS { GP14 }
+#define ENCODER_B_PINS { GP15 }

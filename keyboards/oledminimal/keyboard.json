@@ -1,0 +1,41 @@
+{
+    "manufacturer": "Kovács János",
+    "keyboard_name": "oledminimal",
+    "maintainer": "JanimeSenpai",
+    "bootloader": "rp2040",
+    "diode_direction": "COL2ROW",
+    "processor": "RP2040",
+    "features": {
+        "bootmagic": true,
+        "extrakey": true,
+        "mousekey": true,
+        "nkro": true,
+        "oled": true
+    },
+    "matrix_pins": {
+        "cols": ["GP22"],
+        "rows": ["GP21"]
+    },
+    "usb": {
+        "device_version": "1.0.0",
+        "pid": "0x0000",
+        "vid": "0xFEED"
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0}
+            ]
+        }
+    },
+    "i2c": {
+        "driver": "i2c1",
+        "sda_pin": "GP2",
+        "scl_pin": "GP3"
+    },
+    "oled": {
+        "driver": "ssd1306",
+        "transport": "i2c",
+        "brightness": 128
+    }
+}
