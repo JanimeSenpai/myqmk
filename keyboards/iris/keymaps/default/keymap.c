@@ -5,8 +5,8 @@
 #include "keymap_hungarian.h"
 #include "quantum.h"
 
-#define ARROWS MO(3)
-#define NUMPAD MO(4)
+#define ARROWS MO(4)
+#define NUMPAD MO(5)
 
 // Define the keycode, `QK_USER` avoids collisions with existing keycodes
 enum keycodes {
@@ -16,7 +16,7 @@ enum keycodes {
 // 1st layer on the cycle
 #define LAYER_CYCLE_START 0
 // Last layer on the cycle
-#define LAYER_CYCLE_END   2
+#define LAYER_CYCLE_END   3
 
 // Add the behaviour of this new keycode
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -50,17 +50,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef OLED_ENABLE
 bool oled_task_user(void) {
-   // static const char PROGMEM qmk_logo[] = {
-  //      0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8a,0x8b,0x8c,0x8d,0x8e,0x8f,0x90,0x91,0x92,0x93,0x94,
-   //     0xa0,0xa1,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xab,0xac,0xad,0xae,0xaf,0xb0,0xb1,0xb2,0xb3,0xb4,
-   //     0xc0,0xc1,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xcb,0xcc,0xcd,0xce,0xcf,0xd0,0xd1,0xd2,0xd3,0xd4,0
-   // };
-   // oled_write_P(qmk_logo, false);
-   oled_set_cursor(0,1);
-   oled_write("Hello World!",false);
+    // Set cursor position
+    oled_set_cursor(0, 1);
+    
+    // Get the highest active layer
+    uint8_t current_layer = get_highest_layer(layer_state);
+
+    oled_write("Current Layer: ", false);
+
+    // Display the corresponding layer number
+    switch (current_layer) {
+        case 0:
+            oled_write("0\n(Default)  ", false);
+            break;
+        case 1:
+            oled_write("1\n(Gaming)   ", false);
+            break;
+        case 2:
+            oled_write("2\n(Normal)   ", false);
+            break;
+        case 3:
+            oled_write("3\n(Native)   ", false);
+            break;
+
+        case 4:
+            // Shows when you hold your ARROWS modifier
+            oled_write("4\n(Arrows)   ", false); 
+            break;
+        case 5:
+            // Shows when you hold your NUMPAD modifier
+            oled_write("5\n(Numpad)   ", false); 
+            break;
+        default:
+            oled_write("?            ", false);
+            break;
+    }
+    
     return false;
 }
-
 #endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -78,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(//default layer
     
           HU_0,   KC_1,           KC_2,    KC_3,    KC_4,    KC_5,    KC_6,
-          KC_NO,  KC_Q,           KC_W,    KC_E,    KC_R,    KC_T,    KC_NO,
+          KC_NO,  KC_Q,           KC_W,    KC_E,    KC_R,    KC_T,    KC_ESC,
           KC_V,   KC_A,           KC_S,    KC_D,    KC_F,    KC_G,    KC_LEFT_ALT,
           KC_B,   HU_IACU,         HU_Y,    KC_X,    KC_C,    HU_UACU, KC_B,
                 KC_LEFT_CTRL,    KC_TAB,   NUMPAD, KC_SPACE, KC_ENTER, KC_P4,
@@ -89,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,           HU_Z,           KC_U,           KC_I,                KC_O,    KC_P,             HU_ODAC, 
         HU_SCLN,         KC_H,           KC_J,           KC_K,                 KC_L,    HU_EACU,         HU_AACU, 
         KC_KP_ASTERISK,  KC_N,           KC_M,           KC_COMM,             KC_DOT,  KC_SLSH,          HU_UDAC, 
-      KC_P5,             KC_NO,        KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),   KC_DEL	,   KC_RIGHT_CTRL, 
+      KC_CYCLE_LAYERS,             KC_NO,        KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),   KC_DEL	,   KC_RIGHT_CTRL, 
          KC_P6,          KC_P7,       KC_RSFT
     ),
     [1] = LAYOUT(//gaming layer, each button is different
@@ -105,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,           HU_Z,           KC_U,           KC_I,                KC_O,    KC_P,             HU_ODAC, 
         HU_SCLN,         KC_H,           KC_J,           KC_K,                 KC_L,    HU_EACU,         HU_AACU, 
         KC_KP_ASTERISK,  KC_N,           KC_M,           KC_COMM,             KC_DOT,  KC_SLSH,          HU_UDAC, 
-        KC_P5,             KC_NO,        KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),   KC_DEL	,   KC_RIGHT_CTRL, 
+        KC_CYCLE_LAYERS,             KC_NO,        KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),   KC_DEL	,   KC_RIGHT_CTRL, 
         KC_P6,          KC_P7,       KC_RSFT
     ),
    [2]= LAYOUT(//backspace works like normal
@@ -122,11 +149,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_NO,           HU_Z,           KC_U,           KC_I,                KC_O,    KC_P,             HU_ODAC, 
         HU_SCLN,         KC_H,           KC_J,           KC_K,                 KC_L,    HU_EACU,         HU_AACU, 
         KC_KP_ASTERISK,  KC_N,           KC_M,           KC_COMM,             KC_DOT,  KC_SLSH,          HU_UDAC, 
-      KC_P5,             KC_NO,        KC_BACKSPACE,   LCTL(KC_BACKSPACE),   KC_DEL	,   KC_RIGHT_CTRL, 
+      KC_CYCLE_LAYERS,             KC_NO,        KC_BACKSPACE,   LCTL(KC_BACKSPACE),   KC_DEL	,   KC_RIGHT_CTRL, 
+         KC_P6,          KC_P7,       KC_RSFT
+    ),
+       [3]= LAYOUT(//native IHKL layer 
+    
+          HU_0,   KC_1,           KC_2,    KC_3,    KC_4,    KC_5,    KC_6,
+          KC_NO,  HU_OACU,        KC_U,    HU_AACU, HU_Y,    HU_IACU, KC_NO,
+          HU_ODIA,KC_I,           KC_O,    KC_E,    KC_A,    HU_ODAC, KC_LEFT_ALT,
+          KC_C,   HU_UDIA,        KC_DOT, KC_COMM,  HU_EACU, HU_UDAC, HU_UACU, 
+                  KC_LEFT_CTRL,    KC_TAB,   NUMPAD, KC_SPACE, KC_ENTER, KC_P4,
+                                                   KC_LSFT, KC_1, KC_LEFT_ALT,    
+
+        // right half down
+        KC_NO,           KC_7,           KC_8,           KC_9,               KC_W,      KC_X,           KC_Q,  
+        KC_NO,           KC_F,           HU_Z,           KC_K,                KC_D,    KC_H,             HU_UACU, 
+        HU_SCLN,         KC_B,           KC_L,           KC_T,                 KC_S,    KC_N,         KC_P, 
+        KC_KP_ASTERISK,  KC_V,           KC_R,           KC_M,             KC_G,  KC_J,         KC_SLSH, 
+      KC_CYCLE_LAYERS,             KC_NO,        KC_BACKSPACE,   LCTL(KC_BACKSPACE),   KC_DEL	,   KC_RIGHT_CTRL, 
          KC_P6,          KC_P7,       KC_RSFT
     ),
 
- [3] = LAYOUT(//arrow layer and brackets
+ [4] = LAYOUT(//arrow layer and brackets
         _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,
@@ -135,14 +179,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             _______, _______, _______,
     
         _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, LCTL(KC_LEFT), LCTL(KC_RIGHT), KC_HOME, KC_END, _______,
         _______, _______, KC_LEFT, KC_RIGHT,KC_UP,   KC_DOWN, _______,
         _______, _______,HU_LCBR, HU_RCBR, HU_LBRC, HU_RBRC, _______,
         _______, _______, _______, _______, _______, _______,
         _______, _______, _______
     ),
 
-    [4] =LAYOUT(//numpad layer
+    [5] =LAYOUT(//numpad layer
     
         _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,
@@ -153,9 +197,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     
         _______, _______, _______, _______,   _______, _______, _______,
         _______, _______, KC_P7,   KC_P8,     KC_P9,   KC_PSLS, _______,
-        _______, _______, KC_P4,   KC_P5,     KC_P6,   KC_PAST, _______,
-        _______, _______, KC_P1,   KC_P2,     KC_P3,   KC_PMNS, _______,
-        _______, _______, _______, KC_P0,     KC_PENT, KC_PPLS,
+        _______, _______, KC_P4,   KC_P5,     KC_P6,   KC_PMNS, _______,
+        _______, _______, KC_P1,   KC_P2,     KC_P3,   KC_PPLS, _______,
+        _______, _______, _______, KC_P0,     KC_PENT, _______,
         _______, _______, _______
     ),
 
