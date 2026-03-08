@@ -50,6 +50,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef OLED_ENABLE
 bool oled_task_user(void) {
+    if (is_keyboard_master()) {
     // Set cursor position
     oled_set_cursor(0, 1);
     
@@ -84,6 +85,16 @@ bool oled_task_user(void) {
         default:
             oled_write("?            ", false);
             break;
+    }
+    } 
+    
+    if(!is_keyboard_left()){
+        // --- SLAVE OLED (Right Half) ---
+        oled_set_cursor(0, 1);
+        oled_write("Hello World! ", false);
+        
+        // If you ever want to add that QMK logo back, 
+        // the else block is a great place to put it!
     }
     
     return false;
