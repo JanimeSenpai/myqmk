@@ -116,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(//default layer
     
           HU_0,   KC_1,           KC_2,    KC_3,    KC_4,    KC_5,    KC_6,
-          KC_NO,  KC_Q,           KC_W,    KC_E,    KC_R,    KC_T,    KC_ESC,
+          HU_ODAC,  KC_Q,           KC_W,    KC_E,    KC_R,    KC_T,    KC_ESC,
           KC_V,   KC_A,           KC_S,    KC_D,    KC_F,    KC_G,    KC_LEFT_ALT,
           KC_B,   HU_IACU,         HU_Y,    KC_X,    KC_C,    HU_UACU, KC_B,
                 KC_LEFT_CTRL,    KC_TAB,   NUMPAD, KC_SPACE, KC_ENTER, KC_P4,
