@@ -5,10 +5,11 @@
 #include "keymap_hungarian.h"
 #include "keymap_german.h"
 #include "keymap_finnish.h"
+#include "keymap_italian.h"
 #include "quantum.h"
 
-#define ARROWS MO(6)
-#define NUMPAD MO(7)
+#define ARROWS MO(7)
+#define NUMPAD MO(8)
 
 // Define the keycode, `QK_USER` avoids collisions with existing keycodes
 enum keycodes {
@@ -18,7 +19,7 @@ enum keycodes {
 // 1st layer on the cycle
 #define LAYER_CYCLE_START 0
 // Last layer on the cycle
-#define LAYER_CYCLE_END   5
+#define LAYER_CYCLE_END   6
 
 // Add the behaviour of this new keycode
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -81,13 +82,16 @@ bool oled_task_user(void) {
         case 5:
             oled_write("5\n(Finnish)   ", false);
             break;  
-        case 6:
-            // Shows when you hold your ARROWS modifier
-            oled_write("6\n(Arrows)   ", false); 
-            break;
+            case 6:
+            oled_write("6\n(Italian)   ", false);
+            break;  
         case 7:
+            // Shows when you hold your ARROWS modifier
+            oled_write("7\n(Arrows)   ", false); 
+            break;
+        case 8:
             // Shows when you hold your NUMPAD modifier
-            oled_write("7\n(Numpad)   ", false); 
+            oled_write("8\n(Numpad)   ", false); 
             break;
         default:
             oled_write("?            ", false);
@@ -241,8 +245,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_P6,            KC_RSFT,  KC_NO,          KC_NO,                KC_NO,
         KC_NO,            _______                                                                                                // Row 8 (2 keys)
     ),
+    [6] = LAYOUT( // Italian layer
+        // Left Half
+        KC_ESC,        KC_F1,    KC_F2,         KC_F3,    KC_F4,    KC_F5,      KC_F6,    KC_F7,
+        KC_ALGR,       HU_0,     KC_1,          KC_2,     KC_3,     KC_4,       KC_5,     KC_6,
+        KC_TAB,        IT_UGRV,  IT_OGRV,       KC_U,     IT_AGRV,  IT_Y,       HU_IACU,  KC_NO,
+        KC_CAPS_LOCK,  HU_ODIA,  KC_I,          KC_O,     KC_E,     KC_A,       HU_ODAC,  KC_LEFT_ALT,
+        KC_BACKSPACE,  KC_C,     HU_UDIA,       KC_DOT,   KC_COMM,  IT_EGRV,    HU_UDAC,  HU_UACU,
+        KC_LEFT_GUI, KC_LEFT_CTRL,  KC_TAB,   NUMPAD,   KC_SPACE,   KC_ENTER, KC_P4,
+        KC_NO,         KC_NO,         KC_NO,    KC_LSFT,  KC_LEFT_ALT,  
+        KC_NO,         ARROWS,
 
-    [6] = LAYOUT( // arrow layer and brackets
+        // Right Half
+        KC_F8,            KC_F9,    KC_F10,         KC_F11,              KC_F12,  KC_F13,         KC_F14,  KC_CYCLE_LAYERS,
+        KC_NO,            KC_7,     KC_8,           KC_9,                KC_W,    KC_X,           KC_Q,    _______,
+        KC_NO,            KC_F,     IT_Z,           KC_K,                KC_D,    KC_H,           HU_UACU, _______,
+        HU_SCLN,          KC_B,     KC_L,           KC_T,                KC_S,    KC_N,           KC_P,    _______,
+        KC_KP_ASTERISK,   KC_V,     KC_R,           KC_M,                KC_G,    KC_J,           KC_SLSH, _______,
+        KC_CYCLE_LAYERS,  KC_NO,    KC_CAPS_LOCK,   LCTL(KC_CAPS_LOCK),  KC_DEL,  KC_RIGHT_CTRL,  _______, 
+        KC_P6,            KC_RSFT,  KC_NO,          KC_NO,                KC_NO,
+        KC_NO,            _______                                                                                           // Row 8 (2 keys)
+    ),
+
+
+    [7] = LAYOUT( // arrow layer and brackets
         // Left Half
         _______, _______, _______, _______, _______, _______, _______, _______, 
         _______, _______, _______, _______, _______, _______, _______, _______,
@@ -264,7 +290,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______
     ),
 
-    [7] = LAYOUT( // numpad layer
+    [8] = LAYOUT( // numpad layer
         // Left Half
         _______, _______, _______, _______, _______, _______, _______, _______, 
         _______, _______, _______, _______, _______, _______, _______, _______,
